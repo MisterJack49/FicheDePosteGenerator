@@ -23,6 +23,7 @@ namespace FicheDePosteGenerator
             Kernel.Bind<IGeneratorService>().To<GeneratorService>().InSingletonScope();
             Kernel.Bind<IExcelService>().To<ExcelService>().InSingletonScope();
             Kernel.Bind<IPdfService>().To<PdfService>().InSingletonScope();
+            Kernel.Bind<IDietService>().To<DietService>().InSingletonScope();
 
             Kernel.Bind<IExcelProvider>().To<ExcelProvider>().InSingletonScope();
             Kernel.Bind<IPdfProvider>().To<PdfProvider>().InSingletonScope();

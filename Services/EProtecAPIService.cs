@@ -70,6 +70,48 @@ namespace FicheDePosteGenerator.Services
             return null;
         }
 
+        public async Task<Option<string>> GetEvents(Some<DateTime> startDate, Some<DateTime> endDate)
+        {
+            var settings = _settingsService.Get();
+            await Login(settings.Login, settings.Password);
+
+            if (startDate.IsNone) throw new ArgumentNullException(nameof(startDate));
+            if (endDate.IsNone) throw new ArgumentNullException(nameof(endDate));
+
+            string eventsChoicePage = $"{_baseURI}/evenement_choice.php?" +
+                $"type_evenement=DPS" +
+                $"&ps=0" +
+                $"&filter=106" +
+                $"&subsections=0" +
+                $"&canceled=0" +
+                $"&company=-1" +
+                $"&renforts=0" +
+                $"&competence=0" +
+                $"&ipp=all" +
+                $"&dtdb={startDate.Value.ToString("dd-MM-yyyy")}" +
+                $"&dtfn={endDate.Value.ToString("dd-MM-yyyy")}" +
+                $"&search=";
+
+            await _httpClient.GetAsync(eventsChoicePage);
+
+            string eventsXlsPage = $"{_baseURI}/evenement_list_xls.php";
+
+            var response = await _httpClient.GetAsync(eventsXlsPage);
+            var fileName = $"events.xlsx";
+
+            if (response.IsSuccessStatusCode)
+            {
+                var fileStream = new FileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.None);
+                await response.Content
+                    .CopyToAsync(fileStream)
+                    .ContinueWith(t => fileStream.Close());
+
+                return fileName;
+            }
+
+            return null;
+        }
+
         public void Dispose()
         {
             _httpClient.Dispose();

@@ -27,7 +27,7 @@
     <ProductName>Générateur de fiche de poste</ProductName>
     <PublisherName>Joris Mansart</PublisherName>
     <AutorunEnabled>true</AutorunEnabled>
-    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationRevision>2</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -128,6 +128,7 @@
     <Compile Include="Interfaces\Model\ICellField.cs" />
     <Compile Include="Interfaces\Model\IField.cs" />
     <Compile Include="Interfaces\Providers\IPdfProvider.cs" />
+    <Compile Include="Interfaces\Services\IDietService.cs" />
     <Compile Include="Interfaces\Services\IEProtecAPIService.cs" />
     <Compile Include="Interfaces\Services\IExcelService.cs" />
     <Compile Include="Interfaces\Services\IGenerationDataService.cs" />
@@ -150,6 +151,7 @@
     <Compile Include="Provider\ExcelProvider.cs" />
     <Compile Include="Provider\PdfProvider.cs" />
     <Compile Include="Services\DataService.cs" />
+    <Compile Include="Services\DietService.cs" />
     <Compile Include="Services\EProtecAPIService.cs" />
     <Compile Include="Services\ExcelService.cs" />
     <Compile Include="Services\GenerationDataService.cs" />
@@ -181,9 +183,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Content Include="Resources\FicheDePosteTemplate.pdf">
+    <EmbeddedResource Include="Resources\FicheDePosteTemplate.pdf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    </EmbeddedResource>
     <Content Include="Resources\GeneratorDatabase.db">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

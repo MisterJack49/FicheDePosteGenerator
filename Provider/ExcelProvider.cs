@@ -1,4 +1,5 @@
 ﻿using FicheDePosteGenerator.Interfaces.Providers;
+using LanguageExt;
 using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 namespace FicheDePosteGenerator.Providers
 {
     public class ExcelProvider : IExcelProvider
-    {       
+    {
         public ExcelPackage OpenFile(string filename)
         {
             var file = new FileInfo($"{filename}");
@@ -19,11 +20,11 @@ namespace FicheDePosteGenerator.Providers
             return new ExcelPackage(file);
         }
 
-        public string ReadCell(ExcelPackage excelPackage, string cell)
+        public string ReadCell(ExcelWorksheet worksheet, string cell)
         {
-            var worksheet = excelPackage.Workbook.Worksheets.First();
-
-            return worksheet.Cells[cell].Value.ToString();
+            var cellColor = worksheet.Cells[cell].Style.Font.Color.Rgb;
+            if (cellColor != "FF000000" && cellColor != "000000") return "";
+            return worksheet.Cells[cell].Value?.ToString().Trim() ?? "";
         }
 
         public void CloseFile(ExcelPackage excelPackage)

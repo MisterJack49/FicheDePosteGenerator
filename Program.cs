@@ -25,7 +25,7 @@ namespace FicheDePosteGenerator
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm(kernel.Get<ISettingsService>(), kernel.Get<IEProtecAPIService>(), kernel.Get<IGeneratorService>(), kernel.Get<IGenerationDataService>()));
+            Application.Run(new MainForm(kernel.Get<ISettingsService>(), kernel.Get<IEProtecAPIService>(), kernel.Get<IGeneratorService>(), kernel.Get<IGenerationDataService>(), kernel.Get<IDietService>()));
         }
     }
 }

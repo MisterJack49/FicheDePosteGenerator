@@ -11,6 +11,7 @@ namespace FicheDePosteGenerator.Interfaces.Services
     {
         Task<bool> Login(string login, string password);
         Task<Option<string>> GetEvent(Some<string> eventId);
+        Task<Option<string>> GetEvents(Some<DateTime> startDate, Some<DateTime> endDate);
         void Dispose();
     }
 }

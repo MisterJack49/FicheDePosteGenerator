@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace FicheDePosteGenerator.Interfaces.Services
 {
-    public interface IGeneratorService
+    public interface IDietService
     {
-        void GeneratePdf(GenerationData data, IProgress<int> progress);
+        void SaveDietReferenceFile(string fileName);
+        void GenerateDietSheet(DateTime startDate, DateTime endDate, IProgress<int> progress);
     }
 }

@@ -31,12 +31,17 @@ namespace FicheDePosteGenerator.Services
         }
 
 
-        public async void GeneratePdf(GenerationData data)
+        public async void GeneratePdf(GenerationData data, IProgress<int> progress)
         {
             if (data == null) throw new ArgumentNullException(nameof(data));
+            if (progress == null) throw new ArgumentNullException(nameof(progress));
+            progress.Report(0);
+
+            await _eProtecAPIService.GetEvents(DateTime.Today, DateTime.Today.AddDays(7));
 
             await _eProtecAPIService.GetEvent(data.EventId).IfSomeAsync(fileName =>
             {
+                progress.Report(10);
                 var fieldProperties = data.GetType().GetProperties().Where(x => x.PropertyType == typeof(IField)).ToList();
                 var fields = fieldProperties.Select(x => (IField)x.GetValue(data));
 
@@ -44,41 +49,45 @@ namespace FicheDePosteGenerator.Services
                 var cellFields = cellProperties.Select(x => (ICellField)x.GetValue(data));
 
 
-                _excelService.GetCellsValue(fileName, cellFields.Select(x => x.Cell).ToList()).IfSome(mappingValues =>
-                  {
-                      foreach (var cellField in cellFields)
-                      {
-                          cellField.Value = mappingValues[cellField.Cell];
-                      }
+                _excelService.GetCellsValue(fileName, cellFields.Select(x => x.Cell).ToList())
+                .IfSome(mappingValues =>
+                {
+                    progress.Report(30);
+                    foreach (var cellField in cellFields)
+                    {
+                        cellField.Value = mappingValues[cellField.Cell];
+                    }
 
-                      data.Date.Value = data.Date.Value.Split(new[] { "de" }, StringSplitOptions.None).First();
-                      data.Time.Value = data.Time.Value.Split(new[] { "de" }, StringSplitOptions.None).Last();
+                    data.Date.Value = data.Date.Value.Split(new[] { "de" }, StringSplitOptions.None).First();
+                    data.Time.Value = data.Time.Value.Split(new[] { "de" }, StringSplitOptions.None).Last();
 
-                      var pdfFileInfo = new FileInfo($"Resources/FicheDePosteTemplate.pdf");
+                    var pdfFileInfo = new FileInfo($"Resources/FicheDePosteTemplate.pdf");
 
-                      if (!Directory.Exists("Generated"))
-                      {
-                          Directory.CreateDirectory("Generated");
-                      }
+                    if (!Directory.Exists("Generated"))
+                    {
+                        Directory.CreateDirectory("Generated");
+                    }
 
-                      var generatedFileInfo = new FileInfo($"Generated/[DPS]{data.Event.Value}.pdf");
+                    var generatedFileInfo = new FileInfo($"Generated/[DPS]{data.Event.Value}.pdf");
 
-                      var pdfStream = _pdfService.OpenCreationStream(pdfFileInfo, generatedFileInfo);
+                    var pdfStream = _pdfService.OpenCreationStream(pdfFileInfo, generatedFileInfo);
 
-                      foreach (var cellField in cellFields)
-                      {
-                          _pdfService.SetField(pdfStream.AcroFields, cellField.FieldName, cellField.Value);
-                      }
+                    progress.Report(50);
+                    foreach (var cellField in cellFields)
+                    {
+                        _pdfService.SetField(pdfStream.AcroFields, cellField.FieldName, cellField.Value);
+                    }
 
-                      foreach (var field in fields)
-                      {
-                          _pdfService.SetField(pdfStream.AcroFields, field.FieldName, field.Value);
-                      }
+                    foreach (var field in fields)
+                    {
+                        _pdfService.SetField(pdfStream.AcroFields, field.FieldName, field.Value);
+                    }
 
-                      _pdfService.CloseCreationStream(pdfStream);
+                    _pdfService.CloseCreationStream(pdfStream);
 
-                      Process.Start("explorer.exe", "/select," + generatedFileInfo.FullName);
-                  });
+                    progress.Report(100);
+                    Process.Start("explorer.exe", "/select," + generatedFileInfo.FullName);
+                });
 
                 File.Delete($"{data.EventId}.xlsx");
             });

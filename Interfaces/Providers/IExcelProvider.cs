@@ -10,7 +10,7 @@ namespace FicheDePosteGenerator.Interfaces.Providers
     public interface IExcelProvider
     {
         ExcelPackage OpenFile(string filename);
-        string ReadCell(ExcelPackage excelPackage, string cell);
+        string ReadCell(ExcelWorksheet excelPackage, string cell);
         void CloseFile(ExcelPackage excelPackage);
     }
 }

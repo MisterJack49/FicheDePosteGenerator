@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,19 +21,22 @@ namespace FicheDePosteGenerator
         private readonly IEProtecAPIService _eProtecAPIService;
         private readonly IGeneratorService _generatorService;
         private readonly IGenerationDataService _generationDataService;
+        private readonly IDietService _dietService;
         private Settings _settings;
         private GenerationData _generationData;
 
-        public MainForm(ISettingsService settingsService, IEProtecAPIService eProtecAPIService, IGeneratorService generatorService, IGenerationDataService generationDataService)
+        public MainForm(ISettingsService settingsService, IEProtecAPIService eProtecAPIService, IGeneratorService generatorService, IGenerationDataService generationDataService, IDietService dietService)
         {
             _settingsService = settingsService ?? throw new ArgumentNullException(nameof(settingsService));
             _eProtecAPIService = eProtecAPIService ?? throw new ArgumentNullException(nameof(eProtecAPIService));
             _generatorService = generatorService ?? throw new ArgumentNullException(nameof(generatorService));
             _generationDataService = generationDataService ?? throw new ArgumentNullException(nameof(generationDataService));
+            _dietService = dietService ?? throw new ArgumentNullException(nameof(dietService));
 
             InitializeComponent();
             InitializeSettings();
             InitializeGenerationData();
+            InitializeDietData();
         }
 
         private void InitializeGenerationData()
@@ -60,7 +64,15 @@ namespace FicheDePosteGenerator
             _settings = _settingsService.Get();
             LoginTextBox.Text = _settings.Login;
             PasswordTextBox.Text = _settings.Password;
+            saveSettingsButton.Enabled = _settings.ConnectionStatus == ConnectionStatus.Ok;
             ConnectionStatusLabel.Text = GetStatus(_settings.ConnectionStatus);
+        }
+        private void InitializeDietData()
+        {
+            _settings = _settingsService.Get();
+            DietFileLabel.Text = _settings.DietReferenceFileName ?? "";
+            startDatePicker.Value = DateTime.Today;
+            endDatePicker.Value = DateTime.Today.AddDays(7);
         }
 
         private async void ConnectionTestButton_Click(object sender, EventArgs e)
@@ -72,6 +84,7 @@ namespace FicheDePosteGenerator
             var test = await _eProtecAPIService.Login(_settings.Login, _settings.Password);
 
             _settings.ConnectionStatus = test ? ConnectionStatus.Ok : ConnectionStatus.Ko;
+            saveSettingsButton.Enabled = test;
 
             ConnectionStatusLabel.Text = GetStatus(_settings.ConnectionStatus);
         }
@@ -89,7 +102,7 @@ namespace FicheDePosteGenerator
             }
         }
 
-        private void GenerateButton_Click(object sender, EventArgs e)
+        private async void GenerateButton_Click(object sender, EventArgs e)
         {
             _generationData.EventId = DPSIdTextBox.Text;
             _generationData.TeamNumber.Value = TeamNumberTextBox.Text;
@@ -97,7 +110,12 @@ namespace FicheDePosteGenerator
             _generationData.Meal.Value = MealCheckBox.Checked ? "Yes" : "No";
             _generationData.Local.Value = LocalCheckBox.Checked ? "Yes" : "No";
 
-            _generatorService.GeneratePdf(_generationData);
+            ProgressBar.Maximum = 100;
+            ProgressBar.Step = 1;
+
+            var progress = new Progress<int>(v => ProgressBar.Value = v);
+
+            _generatorService.GeneratePdf(_generationData, progress);
         }
 
         private void saveSettingsButton_Click(object sender, EventArgs e)
@@ -114,6 +132,27 @@ namespace FicheDePosteGenerator
 
             _generationDataService.Set(_generationData);
             _settingsService.Set(_settings);
+        }
+
+        private void dietReferenceButton_Click(object sender, EventArgs e)
+        {
+            int size = -1;
+            DialogResult result = openDietReferenceFile.ShowDialog(); // Show the dialog.
+            if (result == DialogResult.OK) // Test result.
+            {
+                _dietService.SaveDietReferenceFile(openDietReferenceFile.FileName);
+                InitializeDietData();
+            }
+        }
+
+        private void generateDietSheetButton_Click(object sender, EventArgs e)
+        {
+            DietProgressBar.Maximum = 100;
+            DietProgressBar.Step = 1;
+
+            var progress = new Progress<int>(v => DietProgressBar.Value = v);
+
+            _dietService.GenerateDietSheet(startDatePicker.Value, endDatePicker.Value, progress);
         }
     }
 }

@@ -49,7 +49,17 @@
             this.GenerateButton = new System.Windows.Forms.Button();
             this.PapsCheckBox = new System.Windows.Forms.CheckBox();
             this.TabControl = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.MealDietPageTab = new System.Windows.Forms.TabPage();
+            this.DietProgressBar = new System.Windows.Forms.ProgressBar();
+            this.generateDietSheetButton = new System.Windows.Forms.Button();
+            this.DietFileLabel = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
+            this.dietReferenceButton = new System.Windows.Forms.Button();
+            this.endDatePicker = new System.Windows.Forms.DateTimePicker();
+            this.startDatePicker = new System.Windows.Forms.DateTimePicker();
+            this.MatchingTabPage = new System.Windows.Forms.TabPage();
             this.label11 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
@@ -76,10 +86,12 @@
             this.OrganizerPdfTextBox = new System.Windows.Forms.TextBox();
             this.OrganizerExcelTextBox = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.openDietReferenceFile = new System.Windows.Forms.OpenFileDialog();
             this.SettingsTabPage.SuspendLayout();
             this.GenerateTabPage.SuspendLayout();
             this.TabControl.SuspendLayout();
-            this.tabPage1.SuspendLayout();
+            this.MealDietPageTab.SuspendLayout();
+            this.MatchingTabPage.SuspendLayout();
             this.SuspendLayout();
             // 
             // SettingsTabPage
@@ -295,8 +307,9 @@
             // TabControl
             // 
             this.TabControl.Controls.Add(this.GenerateTabPage);
+            this.TabControl.Controls.Add(this.MealDietPageTab);
             this.TabControl.Controls.Add(this.SettingsTabPage);
-            this.TabControl.Controls.Add(this.tabPage1);
+            this.TabControl.Controls.Add(this.MatchingTabPage);
             this.TabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TabControl.Location = new System.Drawing.Point(0, 0);
             this.TabControl.Name = "TabControl";
@@ -304,40 +317,142 @@
             this.TabControl.Size = new System.Drawing.Size(409, 240);
             this.TabControl.TabIndex = 12;
             // 
-            // tabPage1
+            // MealDietPageTab
             // 
-            this.tabPage1.Controls.Add(this.label11);
-            this.tabPage1.Controls.Add(this.label12);
-            this.tabPage1.Controls.Add(this.label13);
-            this.tabPage1.Controls.Add(this.label4);
-            this.tabPage1.Controls.Add(this.TeamNumberPdfTextBox);
-            this.tabPage1.Controls.Add(this.label10);
-            this.tabPage1.Controls.Add(this.MealPdfTextBox);
-            this.tabPage1.Controls.Add(this.label3);
-            this.tabPage1.Controls.Add(this.LocalPdfTextBox);
-            this.tabPage1.Controls.Add(this.PapsPdfTextBox);
-            this.tabPage1.Controls.Add(this.label9);
-            this.tabPage1.Controls.Add(this.TimePdfTextBox);
-            this.tabPage1.Controls.Add(this.TimeExcelTextBox);
-            this.tabPage1.Controls.Add(this.label8);
-            this.tabPage1.Controls.Add(this.DatePdfTextBox);
-            this.tabPage1.Controls.Add(this.DateExcelTextBox);
-            this.tabPage1.Controls.Add(this.label7);
-            this.tabPage1.Controls.Add(this.PlacePdfTextBox);
-            this.tabPage1.Controls.Add(this.PlaceExcelTextBox);
-            this.tabPage1.Controls.Add(this.label6);
-            this.tabPage1.Controls.Add(this.EventPdfTextBox);
-            this.tabPage1.Controls.Add(this.EventExcelTextBox);
-            this.tabPage1.Controls.Add(this.label5);
-            this.tabPage1.Controls.Add(this.OrganizerPdfTextBox);
-            this.tabPage1.Controls.Add(this.OrganizerExcelTextBox);
-            this.tabPage1.Controls.Add(this.label2);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Size = new System.Drawing.Size(401, 214);
-            this.tabPage1.TabIndex = 2;
-            this.tabPage1.Text = "Correspondances";
-            this.tabPage1.UseVisualStyleBackColor = true;
+            this.MealDietPageTab.Controls.Add(this.DietProgressBar);
+            this.MealDietPageTab.Controls.Add(this.generateDietSheetButton);
+            this.MealDietPageTab.Controls.Add(this.DietFileLabel);
+            this.MealDietPageTab.Controls.Add(this.label16);
+            this.MealDietPageTab.Controls.Add(this.label15);
+            this.MealDietPageTab.Controls.Add(this.label14);
+            this.MealDietPageTab.Controls.Add(this.dietReferenceButton);
+            this.MealDietPageTab.Controls.Add(this.endDatePicker);
+            this.MealDietPageTab.Controls.Add(this.startDatePicker);
+            this.MealDietPageTab.Location = new System.Drawing.Point(4, 22);
+            this.MealDietPageTab.Name = "MealDietPageTab";
+            this.MealDietPageTab.Size = new System.Drawing.Size(401, 214);
+            this.MealDietPageTab.TabIndex = 3;
+            this.MealDietPageTab.Text = "Régime Alimentaire";
+            this.MealDietPageTab.UseVisualStyleBackColor = true;
+            // 
+            // DietProgressBar
+            // 
+            this.DietProgressBar.Location = new System.Drawing.Point(11, 186);
+            this.DietProgressBar.Name = "DietProgressBar";
+            this.DietProgressBar.Size = new System.Drawing.Size(382, 20);
+            this.DietProgressBar.TabIndex = 12;
+            this.DietProgressBar.UseWaitCursor = true;
+            // 
+            // generateDietSheetButton
+            // 
+            this.generateDietSheetButton.BackColor = System.Drawing.Color.ForestGreen;
+            this.generateDietSheetButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.generateDietSheetButton.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.generateDietSheetButton.FlatAppearance.BorderSize = 0;
+            this.generateDietSheetButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.generateDietSheetButton.ForeColor = System.Drawing.SystemColors.Window;
+            this.generateDietSheetButton.Location = new System.Drawing.Point(11, 151);
+            this.generateDietSheetButton.Name = "generateDietSheetButton";
+            this.generateDietSheetButton.Size = new System.Drawing.Size(382, 29);
+            this.generateDietSheetButton.TabIndex = 7;
+            this.generateDietSheetButton.Text = "Générer";
+            this.generateDietSheetButton.UseVisualStyleBackColor = false;
+            this.generateDietSheetButton.Click += new System.EventHandler(this.generateDietSheetButton_Click);
+            // 
+            // DietFileLabel
+            // 
+            this.DietFileLabel.AutoSize = true;
+            this.DietFileLabel.Location = new System.Drawing.Point(56, 124);
+            this.DietFileLabel.Name = "DietFileLabel";
+            this.DietFileLabel.Size = new System.Drawing.Size(41, 13);
+            this.DietFileLabel.TabIndex = 6;
+            this.DietFileLabel.Text = "label17";
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(8, 102);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(101, 13);
+            this.label16.TabIndex = 5;
+            this.label16.Text = "Fichier de référence";
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(8, 62);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(59, 13);
+            this.label15.TabIndex = 4;
+            this.label15.Text = "Date de fin";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(8, 24);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(75, 13);
+            this.label14.TabIndex = 3;
+            this.label14.Text = "Date de début";
+            // 
+            // dietReferenceButton
+            // 
+            this.dietReferenceButton.Location = new System.Drawing.Point(318, 97);
+            this.dietReferenceButton.Name = "dietReferenceButton";
+            this.dietReferenceButton.Size = new System.Drawing.Size(75, 23);
+            this.dietReferenceButton.TabIndex = 2;
+            this.dietReferenceButton.Text = "Ouvrir";
+            this.dietReferenceButton.UseVisualStyleBackColor = true;
+            this.dietReferenceButton.Click += new System.EventHandler(this.dietReferenceButton_Click);
+            // 
+            // endDatePicker
+            // 
+            this.endDatePicker.Location = new System.Drawing.Point(193, 56);
+            this.endDatePicker.Name = "endDatePicker";
+            this.endDatePicker.Size = new System.Drawing.Size(200, 20);
+            this.endDatePicker.TabIndex = 1;
+            // 
+            // startDatePicker
+            // 
+            this.startDatePicker.Location = new System.Drawing.Point(193, 18);
+            this.startDatePicker.Name = "startDatePicker";
+            this.startDatePicker.Size = new System.Drawing.Size(200, 20);
+            this.startDatePicker.TabIndex = 0;
+            // 
+            // MatchingTabPage
+            // 
+            this.MatchingTabPage.Controls.Add(this.label11);
+            this.MatchingTabPage.Controls.Add(this.label12);
+            this.MatchingTabPage.Controls.Add(this.label13);
+            this.MatchingTabPage.Controls.Add(this.label4);
+            this.MatchingTabPage.Controls.Add(this.TeamNumberPdfTextBox);
+            this.MatchingTabPage.Controls.Add(this.label10);
+            this.MatchingTabPage.Controls.Add(this.MealPdfTextBox);
+            this.MatchingTabPage.Controls.Add(this.label3);
+            this.MatchingTabPage.Controls.Add(this.LocalPdfTextBox);
+            this.MatchingTabPage.Controls.Add(this.PapsPdfTextBox);
+            this.MatchingTabPage.Controls.Add(this.label9);
+            this.MatchingTabPage.Controls.Add(this.TimePdfTextBox);
+            this.MatchingTabPage.Controls.Add(this.TimeExcelTextBox);
+            this.MatchingTabPage.Controls.Add(this.label8);
+            this.MatchingTabPage.Controls.Add(this.DatePdfTextBox);
+            this.MatchingTabPage.Controls.Add(this.DateExcelTextBox);
+            this.MatchingTabPage.Controls.Add(this.label7);
+            this.MatchingTabPage.Controls.Add(this.PlacePdfTextBox);
+            this.MatchingTabPage.Controls.Add(this.PlaceExcelTextBox);
+            this.MatchingTabPage.Controls.Add(this.label6);
+            this.MatchingTabPage.Controls.Add(this.EventPdfTextBox);
+            this.MatchingTabPage.Controls.Add(this.EventExcelTextBox);
+            this.MatchingTabPage.Controls.Add(this.label5);
+            this.MatchingTabPage.Controls.Add(this.OrganizerPdfTextBox);
+            this.MatchingTabPage.Controls.Add(this.OrganizerExcelTextBox);
+            this.MatchingTabPage.Controls.Add(this.label2);
+            this.MatchingTabPage.Location = new System.Drawing.Point(4, 22);
+            this.MatchingTabPage.Name = "MatchingTabPage";
+            this.MatchingTabPage.Size = new System.Drawing.Size(401, 214);
+            this.MatchingTabPage.TabIndex = 2;
+            this.MatchingTabPage.Text = "Correspondances";
+            this.MatchingTabPage.UseVisualStyleBackColor = true;
             // 
             // label11
             // 
@@ -545,6 +660,11 @@
             this.label2.TabIndex = 0;
             this.label2.Text = "Organisateur";
             // 
+            // openDietReferenceFile
+            // 
+            this.openDietReferenceFile.DefaultExt = "xlsx";
+            this.openDietReferenceFile.Filter = "\"Excel Files|*.xls;*.xlsx;*.xlsm\"";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -562,8 +682,10 @@
             this.GenerateTabPage.ResumeLayout(false);
             this.GenerateTabPage.PerformLayout();
             this.TabControl.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
-            this.tabPage1.PerformLayout();
+            this.MealDietPageTab.ResumeLayout(false);
+            this.MealDietPageTab.PerformLayout();
+            this.MatchingTabPage.ResumeLayout(false);
+            this.MatchingTabPage.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -590,7 +712,7 @@
         private System.Windows.Forms.TabControl TabControl;
         private System.Windows.Forms.Button saveSettingsButton;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage MatchingTabPage;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox OrganizerPdfTextBox;
         private System.Windows.Forms.TextBox OrganizerExcelTextBox;
@@ -617,6 +739,17 @@
         private System.Windows.Forms.TextBox MealPdfTextBox;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox LocalPdfTextBox;
+        private System.Windows.Forms.TabPage MealDietPageTab;
+        private System.Windows.Forms.DateTimePicker startDatePicker;
+        private System.Windows.Forms.DateTimePicker endDatePicker;
+        private System.Windows.Forms.Button dietReferenceButton;
+        private System.Windows.Forms.OpenFileDialog openDietReferenceFile;
+        private System.Windows.Forms.Label DietFileLabel;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.ProgressBar DietProgressBar;
+        private System.Windows.Forms.Button generateDietSheetButton;
     }
 }
 

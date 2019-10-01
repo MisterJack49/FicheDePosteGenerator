@@ -12,5 +12,6 @@ namespace FicheDePosteGenerator.Model
         public string Login { get; set; }
         public string Password { get; set; }
         public ConnectionStatus ConnectionStatus { get; set; }
+        public string DietReferenceFileName { get; set; }
     }
 }
